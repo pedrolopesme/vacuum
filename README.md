@@ -14,8 +14,8 @@ you to keep them compressed in a single file and/or permanently remove them.
 Generally, the **Logs Vacuum Cleaner** is applicable whenever:
 
 * Your application(s) generates multiple log files and there isn't any post process to deal with them
-* You want to be able to compress a set of log files using the compression algorithm of choice.
-* You have more than one directory storing logs
+* You want to be able to compress a set of log files using a compression algorithm of choice.
+* You have more than one directory storing logs and you want a centralized way to purge them.
 * You want to discard old, non-compressed files.
 
 ### Configuration
@@ -30,8 +30,7 @@ This is a complete configuration example:
             "path" : "/some/log/path/",
             "filesPrefix" : "server*",
             "filesSuffix" : "*.log",
-            "remove" : true,
-            "compact" : true,
+            "removeLogs" : true,
             "compressor" : "tar.gz",
             "outputPath" : "/some/backup/path/",
             "outputName" : "logs.2006-01.tag.gz",
@@ -41,8 +40,48 @@ This is a complete configuration example:
 }
 ```
 
-### Developing using Docker
+*Where:*
 
-docker build --rm -t peixeurbano/logs-vacuum .
+#### - path
+Base path where the logs are stored. *Required.*
 
-docker run peixeurbano/logs-vacuum 
+#### - filesPrefix
+Files prefix. Accepts wildcard *. *Not required.*
+
+#### - filesSuffix
+Files suffix. Accepts wildcard *. *Not required.*
+
+#### - removeLogs
+Should the Vacuum remove found logs after merge and compress them? *Not required.*
+
+#### - compressor
+Compression algorithm. Supports only tar.gz at the moment. *Required.*
+
+#### - outputPath
+Output path where the compressed file will be stored. *Required.*
+
+#### - outputName
+Output file name where the compressed file will be stored. Accepts [Go Time format parameters](https://golang.org/pkg/time/#pkg-examples). *Required.*
+
+#### - updateOutput
+If the vacuum finds a previously generated output, should it just update the output file (by appending new log files) ? *Not Required, default false.*
+
+### Develop using Docker
+
+To build a docker image, you should just simply type: 
+
+`$ docker build --rm -t peixeurbano/logs-vacuum .`
+
+In order to run it, simply do: 
+
+`$ docker run peixeurbano/logs-vacuum` 
+ 
+### Running tests
+
+Tests were write using [Go testing](https://golang.org/pkg/testing/). In order to run them, just type:
+
+`$ go test` 
+
+### License
+
+MIT. Copyright (c) [Peixe Urbano](http://www.peixeurbano.com.br). 
