@@ -43,7 +43,7 @@ This is a complete configuration example:
 *Where:*
 
 #### - path
-Base path where the logs are stored. *Required.*
+The Base path where the logs are stored. *Required.*
 
 #### - filesPrefix
 Files prefix. Accepts wildcard *. *Not required.*
@@ -52,10 +52,10 @@ Files prefix. Accepts wildcard *. *Not required.*
 Files suffix. Accepts wildcard *. *Not required.*
 
 #### - removeLogs
-Should the Vacuum remove found logs after merge and compress them? *Not required.*
+Should the Vacuum remove found logs after merging and compress them? *Not required.*
 
 #### - compressor
-Compression algorithm. Supports only tar.gz at the moment. *Required.*
+Compression algorithm. Only tar.gz is supported at the moment. *Required.*
 
 #### - outputPath
 Output path where the compressed file will be stored. *Required.*
@@ -81,6 +81,21 @@ In order to run it, simply do:
 Tests were write using [Go testing](https://golang.org/pkg/testing/). In order to run them, just type:
 
 `$ go test` 
+
+### Generating builds
+
+Under *scripts/* dir you can regenerate builds using *generate-builds.sh* script file. Currently, we are exporting LogsVacuum to the following systems/archs:
+
+* android/arm
+* linux/386
+* linux/amd64
+* linux/arm
+* macos (darwin)/386
+* macos (darwin)/amd64
+* windows/386
+* windows/amd64
+
+The latest builds can be found at /dist dir.
 
 ### License
 
