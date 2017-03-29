@@ -1,4 +1,4 @@
-package main
+package logsVacuum
 
 import (
 	"archive/tar"
@@ -16,8 +16,8 @@ import (
 // ConfigPath : default config path
 const ConfigPath = "./config/vacuums.json"
 
-// JSONObject contains a list of vacuums to be used.
-type JSONObject struct {
+// Config contains a list of vacuums to be used.
+type Config struct {
 	Vacuums []Vacuum
 }
 
@@ -27,7 +27,6 @@ type Vacuum struct {
 	FilesPrefix  string
 	FilesSufix   string
 	RemoveLogs   bool
-	Compact      bool
 	Compressor   string
 	OutputPath   string
 	OutputName   string
@@ -35,7 +34,7 @@ type Vacuum struct {
 }
 
 // Reads vacuums.json into ./config dir
-func loadVacuums() JSONObject {
+func loadVacuums() Config {
 	file, e := ioutil.ReadFile(ConfigPath)
 	if e != nil {
 		fmt.Printf("It was impossible load vacuums file from %v. Error %v\n", ConfigPath, e)
@@ -43,7 +42,7 @@ func loadVacuums() JSONObject {
 	}
 
 	fmt.Printf("Found vacuum file : %v\n", ConfigPath)
-	var vacuums JSONObject
+	var vacuums Config
 	json.Unmarshal(file, &vacuums)
 	return vacuums
 }
@@ -88,6 +87,11 @@ func generateOutputFilename(vacuum Vacuum) string {
 // Creates output file
 func createOutput(vacuum Vacuum) *os.File {
 	outputFile := generateOutputFilename(vacuum)
+	if outputFile == "" {
+		fmt.Printf("Invalid output name.\n")
+		return nil
+	}
+
 	dirExists, err := exists(outputFile)
 	if (!vacuum.UpdateOutput) && dirExists || err != nil {
 		fmt.Printf("Output file found at %v but Logs Vacuum isn't allowed to update it.\n", outputFile)
@@ -115,10 +119,12 @@ func addFile(tw *tar.Writer, path string) error {
 		header.Size = stat.Size()
 		header.Mode = int64(stat.Mode())
 		header.ModTime = stat.ModTime()
+
 		// write the header to the tarball archive
 		if err := tw.WriteHeader(header); err != nil {
 			return err
 		}
+
 		// copy the file data to the tarball
 		if _, err := io.Copy(tw, file); err != nil {
 			return err
@@ -168,7 +174,7 @@ func compress(vacuum Vacuum, files []string) {
 }
 
 // Runs a vacuum
-func clean(vacuum Vacuum) {
+func run(vacuum Vacuum) {
 	dirExists, err := exists(vacuum.Path)
 	if !dirExists || err != nil {
 		fmt.Printf("It was impossible clean path %v: It doesn't exit or isn't readable.\n", vacuum.Path)
@@ -184,10 +190,31 @@ func clean(vacuum Vacuum) {
 	compress(vacuum, files)
 }
 
+// Validate if a vacuum has all mandatory fields
+func isValid(vacuum Vacuum) bool {
+	if vacuum.Path == "" {
+		fmt.Printf("You must supply path in your vacuum configuration.\n")
+		return false
+	}
+	if vacuum.OutputName == "" {
+		fmt.Printf("You must supply outputName in your vacuum configuration.\n")
+		return false
+	}
+	if vacuum.OutputPath == "" {
+		fmt.Printf("You must supply outputPath in your vacuum configuration.\n")
+		return false
+	}
+	if vacuum.Compressor == "" {
+		fmt.Printf("You must supply compressor in your vacuum configuration.\n")
+		return false
+	}
+	return true
+}
+
 func main() {
 	fmt.Println("Running Logs Vacuum Cleaner")
 	vacuums := loadVacuums()
 	for _, vacuum := range vacuums.Vacuums {
-		clean(vacuum)
+		run(vacuum)
 	}
 }
