@@ -99,4 +99,4 @@ The latest builds can be found at /dist dir.
 
 ### License
 
-MIT. Copyright (c) [Peixe Urbano](http://www.peixeurbano.com.br). 
+MIT. Copyright (c) [Pedro Mendes](http://www.pedromendes.com.br). 
