@@ -46,10 +46,14 @@ This is a complete configuration example:
 The Base path where the logs are stored. *Required.*
 
 #### - filesPrefix
-Files prefix. Accepts wildcard *. *Not required.*
+Files prefix. Accepts wildcard \*. Under \*nix systems you can
+speficy more than one pattern using braces. Ex: 
+{log-\*,access-\*,error-\*} *Not required.*
 
 #### - filesSuffix
-Files suffix. Accepts wildcard *. *Not required.*
+Files suffix. Accepts wildcard \*. Under \*nix systems you can
+speficy more than one pattern using braces. Ex: 
+{\*.log,\*.txt,\*.output} *Not required.*
 
 #### - removeLogs
 Should the Vacuum remove found logs after merging and compress them? *Not required.*
@@ -86,7 +90,6 @@ Tests were write using [Go testing](https://golang.org/pkg/testing/). In order t
 
 Under *scripts/* dir you can regenerate builds using *generate-builds.sh* script file. Currently, we are exporting LogsVacuum to the following systems/archs:
 
-* android/arm
 * linux/386
 * linux/amd64
 * linux/arm
