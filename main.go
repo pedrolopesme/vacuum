@@ -215,6 +215,8 @@ func main() {
 	fmt.Println("Running Logs Vacuum Cleaner")
 	vacuums := loadVacuums()
 	for _, vacuum := range vacuums.Vacuums {
-		run(vacuum)
+		if isValid(vacuum) {
+			run(vacuum)
+		}
 	}
 }
