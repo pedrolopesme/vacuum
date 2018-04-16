@@ -70,6 +70,15 @@ Output file name where the compressed file will be stored. Accepts [Go Time form
 #### - updateOutput
 If the vacuum finds a previously generated output, should it just update the output file (by appending new log files) ? *Not Required, default false.*
 
+### Makefile
+
+This project provides a Makefile with all common operations need to develop, test and build call-it.
+
+* build: generates binaries
+* test: runs all tests
+* clean: removes binaries
+* run: executes main func
+
 ### Develop using Docker
 
 To build a docker image, you should just simply type: 
