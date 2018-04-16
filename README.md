@@ -74,11 +74,11 @@ If the vacuum finds a previously generated output, should it just update the out
 
 To build a docker image, you should just simply type: 
 
-`$ docker build --rm -t peixeurbano/logs-vacuum .`
+`$ docker build --rm -t somedir/logs-vacuum .`
 
 In order to run it, simply do: 
 
-`$ docker run peixeurbano/logs-vacuum` 
+`$ docker run somedir/logs-vacuum` 
  
 ### Running tests
 
