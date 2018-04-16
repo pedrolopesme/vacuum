@@ -13,7 +13,7 @@ you to keep them compressed in a single file and/or permanently remove them.
 
 Generally, the **Logs Vacuum Cleaner** is applicable whenever:
 
-* Your application(s) generates multiple log files and there isn't any post process to deal with them
+* Your application(s) generates multiple log files and there isn't a post process to deal with them
 * You want to be able to compress a set of log files using a compression algorithm of choice.
 * You have more than one directory storing logs and you want a centralized way to purge them.
 * You want to discard old, non-compressed files.
